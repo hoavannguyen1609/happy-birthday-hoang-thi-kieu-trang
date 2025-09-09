@@ -266,11 +266,8 @@
               <path d="M3 22v-20l18 10-18 10z" />
             </svg>
           </button>
-          <audio id="background-music" loop>
-            <source
-              src="https://github.com/hoavannguyen1609/happy-birthday-hoang-thi-kieu-trang/blob/main/assets/audios/audio.mp3"
-              type="audio/mpeg"
-            />
+          <audio id="background-music" loop src="./assets/audios/audio.mp3">
+            <!-- <source src="./assets/audios/audio.mp3" type="audio/mpeg" /> -->
           </audio>
         </header>
 
@@ -283,18 +280,18 @@
           </h2>
           <div id="birthday-message">
             <p class="mb-4 text-gray-700 leading-relaxed">
-              Chúc mừng sinh nhật, cô bạn bánh bèo nhưng giàu tình cảm của tôi!
-              Hôm nay là một ngày thật đặc biệt, ngày mà Chúa đã ban cho thế
-              giới một người bạn tuyệt vời như bạn. Dù là bạn bè, tôi cũng muốn
-              gửi đến bạn những lời chúc tốt đẹp nhất cho một trang mới của cuộc
-              đời. Chúc bạn một tuổi mới tràn ngập niềm vui, tiếng cười và những
-              trải nghiệm thật đáng nhớ.
+              Chúc mừng sinh nhật, Tê-rê-sa Hoàng Thị Kiều Trang! Hôm nay là một
+              ngày thật đặc biệt, ngày mà Chúa đã ban cho thế giới một người bạn
+              tuyệt vời như bạn. Dù là bạn bè, tôi cũng muốn gửi đến bạn những
+              lời chúc tốt đẹp nhất cho một trang mới của cuộc đời. Chúc bạn một
+              tuổi mới tràn ngập niềm vui, tiếng cười và những trải nghiệm thật
+              đáng nhớ.
             </p>
             <p class="mb-4 text-gray-700 leading-relaxed">
               Chúc bạn luôn tràn đầy sức khỏe, để tiếp tục cuộc hành trình sống
-              động và đầy ý nghĩa của mình. Nguyện xin Chúa luôn gìn giữ, che
-              chở và soi sáng cho bạn trong mọi quyết định, để mọi công việc bạn
-              làm đều được hồng ân của Ngài.
+              động và đầy ý nghĩa của mình. Nguyện xin Đức Chúa luôn gìn giữ,
+              che chở và soi sáng cho bạn trong mọi quyết định, để mọi công việc
+              bạn làm đều được hồng ân của Ngài.
             </p>
             <blockquote
               class="italic border-l-4 border-l-[#48cae4] pl-4 my-4 text-gray-600"
@@ -318,17 +315,23 @@
             </blockquote>
             <p class="mb-4 text-gray-700 leading-relaxed">
               Sắp tới, bạn và Bùi Quang Minh sẽ xây dựng tổ ấm. Dù đã có người
-              yêu và sắp lấy chồng, nhưng tình bạn giữa chúng ta vẫn sẽ luôn bền
-              chặt nhé! Chúc cho hôn nhân của bạn sẽ luôn tràn ngập tiếng cười,
-              sự thấu hiểu và tình yêu thương của Thiên Chúa. Hy vọng tình yêu
-              của hai bạn sẽ luôn nồng nàn như thuở ban đầu và cùng nhau viết
-              nên một câu chuyện cổ tích có thật.
+              yêu và sắp lấy chồng, nhưng hãy giữ vững tình bạn nhé! Chúc cho
+              hôn nhân của bạn sẽ luôn tràn ngập tiếng cười, sự thấu hiểu và
+              tình yêu thương của Thiên Chúa. Hy vọng tình yêu của hai bạn sẽ
+              luôn nồng nàn như thuở ban đầu và cùng nhau viết nên một câu
+              chuyện cổ tích có thật.
             </p>
             <blockquote
               class="italic border-l-4 border-l-[#48cae4] pl-4 my-4 text-gray-600"
             >
               "Hai người thì hơn một người, vì họ có công lao xứng đáng với
               nhau." - Truyền đạo 4:9
+            </blockquote>
+            <blockquote
+              class="italic border-l-4 border-l-[#48cae4] pl-4 my-4 text-gray-600"
+            >
+              "Sự gì Thiên Chúa đã phối hợp, loài người không được phân ly." -
+              (Mt 19, 3-12)
             </blockquote>
             <p class="text-gray-700 leading-relaxed">
               Cầu chúc bạn luôn là một người vợ hiền thảo, một người bạn đáng
@@ -349,6 +352,7 @@
               controls
               autoplay
               class="mt-4 w-full max-w-sm rounded-lg shadow-md hidden"
+              hidden
             ></audio>
           </div>
         </section>
@@ -455,7 +459,7 @@
         "#f9ada0",
         "#e2f9e4",
       ];
-      const apiKey = typeof __app_id !== "undefined" ? "" : "DUMMY_KEY";
+      const apiKey = "AIzaSyBKoQe192hFTwpKBwTSQu-TunClKrRqSZA";
 
       // Các phần tử DOM
       const countdownSection = document.getElementById("countdown-section");
@@ -501,22 +505,34 @@
                 measurementId: "G-8D7FLYJW8P",
               })
         );
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
 
-        async function signIn() {
-          try {
-            if (typeof __initial_auth_token !== "undefined") {
-              await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-              await signInAnonymously(auth);
+        // Khởi tạo Firebase chỉ khi có khóa API hợp lệ
+        if (firebaseConfig.apiKey) {
+          app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+
+          async function signIn() {
+            try {
+              if (typeof __initial_auth_token !== "undefined") {
+                await signInWithCustomToken(auth, __initial_auth_token);
+              } else {
+                await signInAnonymously(auth);
+              }
+              console.log("Firebase: Đăng nhập thành công!");
+            } catch (error) {
+              console.error("Firebase Auth Error:", error);
+              console.log(
+                "Firebase: Không thể đăng nhập. Vui lòng sử dụng tính năng 'Preview' để trải nghiệm đầy đủ."
+              );
             }
-          } catch (error) {
-            console.error("Firebase Auth Error:", error);
           }
+          signIn();
+        } else {
+          console.warn(
+            "Firebase: Không có cấu hình hợp lệ. Các tính năng cần Firestore sẽ không hoạt động."
+          );
         }
-        signIn();
       } catch (e) {
         console.error(
           "Lỗi: Không thể khởi tạo Firebase. Vui lòng chạy ứng dụng này trong môi trường hỗ trợ Firebase."
@@ -615,7 +631,7 @@
             const url = URL.createObjectURL(wavBlob);
             audioPlayer.src = url;
             audioPlayer.play();
-            audioPlayer.classList.remove("hidden");
+            // audioPlayer.classList.remove("hidden");
           } else {
             console.error("Audio generation failed:", result);
           }
@@ -664,14 +680,14 @@
           const balloonEl = document.createElement("div");
           balloonEl.className = "balloon";
           balloonEl.style.cssText = `
-          left: ${left}vw;
-          width: ${size}px;
-          height: ${size}px;
-          background-color: ${color};
-          animation-duration: ${duration}s;
-          animation-delay: ${delay}s;
-          animation-name: balloon-float;
-        `;
+              left: ${left}vw;
+              width: ${size}px;
+              height: ${size}px;
+              background-color: ${color};
+              animation-duration: ${duration}s;
+              animation-delay: ${delay}s;
+              animation-name: balloon-float;
+            `;
           balloonsContainer.appendChild(balloonEl);
           setTimeout(
             () => balloonsContainer.removeChild(balloonEl),
@@ -686,12 +702,12 @@
           const confettiEl = document.createElement("div");
           confettiEl.className = "confetti";
           confettiEl.style.cssText = `
-          left: ${left}%;
-          background-color: ${color};
-          animation-duration: 3s;
-          animation-timing-function: linear;
-          animation-name: confetti-fall;
-        `;
+              left: ${left}%;
+              background-color: ${color};
+              animation-duration: 3s;
+              animation-timing-function: linear;
+              animation-name: confetti-fall;
+            `;
           confettiContainer.appendChild(confettiEl);
           setTimeout(() => confettiContainer.removeChild(confettiEl), 3000);
         }, 100);
@@ -757,11 +773,11 @@
               newImageDiv.className =
                 "p-4 rounded-lg bg-[#d4f2d7] flex flex-col items-center shadow-lg mb-4";
               newImageDiv.innerHTML = `
-              <img src="data:image/png;base64,${generatedBase64}" alt="Hình ảnh đã chỉnh sửa" class="rounded-lg max-w-full h-auto" />
-              <p class="mt-2 text-sm text-center italic text-gray-600">
-                Prompt: "${prompt}"
-              </p>
-            `;
+                  <img src="data:image/png;base64,${generatedBase64}" alt="Hình ảnh đã chỉnh sửa" class="rounded-lg max-w-full h-auto" />
+                  <p class="mt-2 text-sm text-center italic text-gray-600">
+                    Prompt: "${prompt}"
+                  </p>
+                `;
               generatedImagesContainer.prepend(newImageDiv);
             } else {
               console.error("Image generation failed:", result);
