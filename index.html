@@ -237,7 +237,7 @@
             Chúc mừng sinh nhật,<br />Têrêsa Hoàng Thị Kiều Trang!
           </h1>
           <p
-            class="text-lg md:text-xl mt-2 italic text-[#83c5be] font-light animate-fade-in-up"
+            class="text-lg md:text-xl mt-2 italic text-[#83c5be] font-light font-semibold animate-fade-in-up"
           >
             2002 - 09/09 - 2025
           </p>
@@ -263,11 +263,11 @@
               viewBox="0 0 24 24"
               class="w-6 h-6"
             >
-              <path d="M3 22v-20l18 10-18 10z" />
+              <path d="M6 5h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2z" />
             </svg>
           </button>
-          <audio id="background-music" loop src="./assets/audios/audio.mp3">
-            <!-- <source src="./assets/audios/audio.mp3" type="audio/mpeg" /> -->
+          <audio id="background-music" loop>
+            <source src="./assets/audios/audio.mp3" type="audio/mpeg" />
           </audio>
         </header>
 
@@ -798,14 +798,42 @@
         if (isPlaying) {
           backgroundMusic.pause();
           playButton.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M6 5h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2z"/></svg>';
+            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M3 22v-20l18 10-18 10z"/></svg>';
         } else {
           backgroundMusic.play();
           playButton.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M3 22v-20l18 10-18 10z"/></svg>';
+            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M6 5h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2z"/></svg>';
         }
         isPlaying = !isPlaying;
       });
+
+      // Start music on first user interaction after countdown ends
+      const firstInteractionHandler = () => {
+        console.log({ isTimeUp }, { isPlaying });
+
+        if (isTimeUp && !isPlaying) {
+          backgroundMusic
+            .play()
+            .then(() => {
+              isPlaying = true;
+              // Remove the event listener after the music starts to prevent issues
+              document.body.removeEventListener(
+                "mousedown",
+                firstInteractionHandler
+              );
+              document.body.removeEventListener(
+                "touchstart",
+                firstInteractionHandler
+              );
+            })
+            .catch((error) => {
+              console.error("Lỗi khi tự động phát nhạc:", error);
+            });
+        }
+      };
+
+      document.body.addEventListener("mousedown", firstInteractionHandler);
+      document.body.addEventListener("touchstart", firstInteractionHandler);
 
       ttsButton.addEventListener("click", speakMessage);
       generateButton.addEventListener("click", editImageWithGemini);
