@@ -809,8 +809,6 @@
 
       // Start music on first user interaction after countdown ends
       const firstInteractionHandler = () => {
-        console.log({ isTimeUp }, { isPlaying });
-
         if (isTimeUp && !isPlaying) {
           backgroundMusic
             .play()
