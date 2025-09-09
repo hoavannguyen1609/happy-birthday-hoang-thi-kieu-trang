@@ -454,7 +454,7 @@
         "#f9ada0",
         "#e2f9e4",
       ];
-      const apiKey = "";
+      const apiKey = typeof __app_id !== "undefined" ? "" : "DUMMY_KEY";
 
       // Các phần tử DOM
       const countdownSection = document.getElementById("countdown-section");
@@ -485,35 +485,43 @@
       let isSpeaking = false;
 
       // Firebase Initialization (MANDATORY)
-      const firebaseConfig = JSON.parse(
-        typeof __firebase_config !== "undefined"
-          ? __firebase_config
-          : JSON.stringify({
-              apiKey: "AIzaSyBc4M3Pdwwas6C_EmyBfrzjQDHsiJf0VTo",
-              authDomain: "my-portfolio-2af8c.firebaseapp.com",
-              projectId: "my-portfolio-2af8c",
-              storageBucket: "my-portfolio-2af8c.firebasestorage.app",
-              messagingSenderId: "480332314483",
-              appId: "1:480332314483:web:9d2fec62cb56f68ee2f706",
-              measurementId: "G-8D7FLYJW8P",
-            })
-      );
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
+      let app, auth, db;
+      try {
+        const firebaseConfig = JSON.parse(
+          typeof __firebase_config !== "undefined"
+            ? __firebase_config
+            : JSON.stringify({
+                apiKey: "AIzaSyBc4M3Pdwwas6C_EmyBfrzjQDHsiJf0VTo",
+                authDomain: "my-portfolio-2af8c.firebaseapp.com",
+                projectId: "my-portfolio-2af8c",
+                storageBucket: "my-portfolio-2af8c.firebasestorage.app",
+                messagingSenderId: "480332314483",
+                appId: "1:480332314483:web:9d2fec62cb56f68ee2f706",
+                measurementId: "G-8D7FLYJW8P",
+              })
+        );
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
 
-      async function signIn() {
-        try {
-          if (typeof __initial_auth_token !== "undefined") {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
+        async function signIn() {
+          try {
+            if (typeof __initial_auth_token !== "undefined") {
+              await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+              await signInAnonymously(auth);
+            }
+          } catch (error) {
+            console.error("Firebase Auth Error:", error);
           }
-        } catch (error) {
-          console.error("Firebase Auth Error:", error);
         }
+        signIn();
+      } catch (e) {
+        console.error(
+          "Lỗi: Không thể khởi tạo Firebase. Vui lòng chạy ứng dụng này trong môi trường hỗ trợ Firebase."
+        );
+        console.error(e);
       }
-      signIn();
 
       // Helper functions for TTS audio conversion
       const base64ToArrayBuffer = (base64) => {
@@ -690,6 +698,15 @@
 
       // Image editing with Gemini
       async function editImageWithGemini() {
+        if (apiKey === "DUMMY_KEY") {
+          generateButton.textContent =
+            "Tính năng chỉ hoạt động khi xem trước trực tuyến!";
+          setTimeout(() => {
+            generateButton.textContent = "✨ Chỉnh Sửa Ảnh ✨";
+          }, 5000);
+          return;
+        }
+
         const file = imageUpload.files[0];
         const prompt = imagePrompt.value;
 
@@ -764,11 +781,11 @@
         if (isPlaying) {
           backgroundMusic.pause();
           playButton.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M3 22v-20l18 10-18 10z"/></svg>';
+            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M6 5h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2z"/></svg>';
         } else {
           backgroundMusic.play();
           playButton.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M6 5h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2zm4 0h-2v14h2z"/></svg>';
+            '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M3 22v-20l18 10-18 10z"/></svg>';
         }
         isPlaying = !isPlaying;
       });
